@@ -1,0 +1,48 @@
+name: Build and Deploy API
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RESOURCE_GROUP: rg-cs2-network-prod
+  CONTAINER_APP_NAME: api-container
+  ACR_NAME: subeeacr
+  ACR_LOGIN_SERVER: subeeacr.azurecr.io
+  IMAGE_NAME: api-app
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login to ACR
+        run: az acr login --name $ACR_NAME
+
+      - name: Build image
+        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
+
+      - name: Push image
+        run: docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}
+
+      - name: Deploy to Azure Container App
+        run: |
+          az containerapp update \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --image $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}
