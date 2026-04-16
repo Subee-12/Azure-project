@@ -26,7 +26,7 @@ def log_request():
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({"message": "Monitoring API is running"}), 200
+    return jsonify({"message": "Monitoring API v2 is running"}), 200
 
 @app.route("/api/metrics", methods=["POST"])
 def create_metric():
