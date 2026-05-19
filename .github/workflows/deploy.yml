@@ -38,7 +38,10 @@ jobs:
         run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
 
       - name: Push image
-        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
+        run: docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}
+
+      - name: Verify image exists in ACR
+        run: az acr repository show-tags --name $ACR_NAME --repository $IMAGE_NAME --output table
 
       - name: Deploy to Azure Container App
         run: |
