@@ -35,10 +35,10 @@ jobs:
         run: az acr login --name $ACR_NAME
 
       - name: Build image
-        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
+        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} ./monitoring-app/frontend
 
       - name: Push image
-        run: docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}
+        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} ./monitoring-app/frontend
 
       - name: Deploy to Azure Container App
         run: |
