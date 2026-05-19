@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monitoring Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #1f2937;
+        }
+
+        .status {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .empty {
+            color: #666;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Monitoring Dashboard</h1>
+
+    <div class="status">
+        <p><span class="label">Frontend:</span> running in Docker container</p>
+        <p><span class="label">Backend API:</span> connected through Docker network</p>
+    </div>
+
+    {% if metrics %}
+        {% for metric in metrics %}
+            <div class="card">
+                <h2>{{ metric.hostname }}</h2>
+                <p><span class="label">CPU:</span> {{ metric.cpu }}%</p>
+                <p><span class="label">Memory:</span> {{ metric.memory }}%</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty">
+            <p>No monitoring data available yet.</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
