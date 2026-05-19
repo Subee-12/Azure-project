@@ -38,7 +38,7 @@ jobs:
         run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
 
       - name: Push image
-        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} ./monitoring-app/frontend
+        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }} .
 
       - name: Deploy to Azure Container App
         run: |
